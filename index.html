@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>Simple WebGL Globe</title>
+</head>
+<body>
+<canvas id="mapCanvas"></canvas>
+</body>
+<script  id="vertex-shader-2d" type="x-shader/x-vertex">
+    attribute vec3 vertex;
+    attribute vec3 normal;
+    attribute vec2 texCoord;
+
+    uniform mat4 projection;
+    uniform mat4 modelView;
+
+    varying vec3 vnormal;
+    varying vec2 v_texCoord;
+
+    void main(void)
+    {
+        gl_Position = projection*modelView * vec4(vertex, 1);
+        vnormal = normal;
+        v_texCoord = texCoord;
+    }
+</script>
+<script  id="fragment-shader-2d" type="x-shader/x-fragment">
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #else
+    precision mediump float;
+    #endif
+
+    uniform vec4 color;
+    uniform sampler2D u_image;
+
+    varying vec3 vnormal;
+    varying vec2 v_texCoord;
+
+    void main(void)
+    {
+        gl_FragColor = texture2D(u_image, v_texCoord);
+    }
+</script>
+
+<script src="util/webgl-utils.js"></script>
+<script src="util/m3.js"></script>
+<script src="util/m4.js"></script>
+<script src="util/sphere.js"></script>
+<script src="main.js"></script>
+</html>
